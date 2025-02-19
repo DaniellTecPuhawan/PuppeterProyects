@@ -1,0 +1,42 @@
+var synthetics = require('Synthetics');
+const log = require('SyntheticsLogger');
+
+const recordedScript = async function () {
+  let page = await synthetics.getPage();
+  
+  const navigationPromise = page.waitForNavigation()
+  
+  await synthetics.executeStep('Goto_0', async function() {
+    await page.goto("https://aenatravel.aena.es/es/sessionFinished", {waitUntil: 'domcontentloaded', timeout: 60000})
+  })
+  
+  await page.setViewport({ width: 1920, height: 951 })
+  
+  await synthetics.executeStep('Click_1', async function() {
+    await page.waitForSelector('.col-xs-5 > .nav__right > .nav__links > .nav__button-user > .c-button--session')
+    await page.click('.col-xs-5 > .nav__right > .nav__links > .nav__button-user > .c-button--session')
+  })
+  
+  await navigationPromise
+  
+  await synthetics.executeStep('Click_2', async function() {
+    await page.waitForSelector('#gigya-login-form > .gigya-layout-row > .gigya-layout-cell > .gigya-composite-control > .gigya-input-text')
+    await page.click('#gigya-login-form > .gigya-layout-row > .gigya-layout-cell > .gigya-composite-control > .gigya-input-text')
+  })
+  
+  await synthetics.executeStep('Type_3', async function() {
+    await page.type('#gigya-login-form > .gigya-layout-row > .gigya-layout-cell > .gigya-composite-control > .gigya-input-text', "daniell.tec@entelgy.com")
+  })
+  
+  await synthetics.executeStep('Type_4', async function() {
+    await page.type('#gigya-login-form > .gigya-layout-row > .gigya-layout-cell > .gigya-composite-control > .gigya-input-password', "Arbust0@EN@1")
+  })
+  
+  await navigationPromise
+  
+  await navigationPromise
+  
+};
+exports.handler = async () => {
+    return await recordedScript();
+};
